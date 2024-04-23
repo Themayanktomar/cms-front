@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Members</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>All Members</h1>
+    <div class="member-table-container">
+        <table id="member-table">
+            <thead>
+                <tr>
+                    <th>Member ID</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Date of Birth</th>
+                    <th>Address</th>
+                    <th>Contact No</th>
+                    <th>Email</th>
+                    <th>Gender</th>
+                    <th>Nominee Count</th>
+                    <th>Insurance Type</th>
+                    <th>Max Claim Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Table body will be populated dynamically by JavaScript -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', 'http://localhost:8080/members/gelAllMember', true);
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === XMLHttpRequest.DONE) {
+                    if (xhr.status === 200) {
+                        var data = JSON.parse(xhr.responseText);
+                        displayMembers(data);
+                    } else {
+                        console.error('Failed to fetch data from the API');
+                    }
+                }
+            };
+            xhr.send();
+        });
+
+        function displayMembers(data) {
+            var tableBody = document.querySelector('#member-table tbody');
+
+            data.forEach(function(member) {
+                var row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${member.memberId}</td>
+                    <td>${member.firstName}</td>
+                    <td>${member.lastName}</td>
+                    <td>${member.dateOfBirth}</td>
+                    <td>${member.address}</td>
+                    <td>${member.contactNo}</td>
+                    <td>${member.email}</td>
+                    <td>${member.gender}</td>
+                    <td>${member.nomineeCount}</td>
+                    <td>${member.insuranceType}</td>
+                    <td>${member.maxClaimAmount || ''}</td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+    </script>
+</body>
+</html>
